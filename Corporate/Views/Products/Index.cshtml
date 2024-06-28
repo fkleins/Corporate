@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Product>
+
+<h1>Produkti</h1>
+
+@if (User.IsInRole("Admin"))
+{
+    <div>
+        <a asp-action="Create" class="btn btn-primary">Create New Product</a>
+    </div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Preces nosaukums</th>
+            <th>Vienību skaits</th>
+            <th>Cena par vienu vienību</th>
+            <th>Cena ar PVN</th>
+            @if (User.IsInRole("Admin"))
+            {
+                <th>Actions</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@item.Quantity</td>
+                <td>@item.Price</td>
+                <td>@String.Format("{0:0.00}", item.Price * 1.21m)</td> <!-- Calculate and format VAT price -->
+                @if (User.IsInRole("Admin"))
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
